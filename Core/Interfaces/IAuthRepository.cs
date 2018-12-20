@@ -6,5 +6,6 @@ namespace Code.Core.Interfaces
     public interface IAuthRepository
     {
         Task<User> Login(string emailUsername, string password);
+        Task<User> Register(User user, string password);
     }
 }

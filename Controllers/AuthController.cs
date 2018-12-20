@@ -3,6 +3,7 @@ using AutoMapper;
 using Code.Controllers.Resources.Http.RequestResources;
 using Code.Controllers.Resources.Http.ResponseResources;
 using Code.Core.Interfaces;
+using Code.Core.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,6 +34,18 @@ namespace Code.Controllers
             
             // return Ok(new {token =  Functions.generateUserToken(user,_config), user = userResponseResource });
             return Ok(loginRequestResource);
+        }
+
+        [HttpPost("register")]
+        public async Task<IActionResult> Register(RegisterRequestResource registerRequestResource)
+        {
+            var user = _mapper.Map<User>(registerRequestResource);
+            user = await _auth.Register(user, registerRequestResource.Password);
+
+            var userResponseResource = _mapper.Map<UserResponseResource>(user);
+            
+            // return Ok(new {token =  Functions.generateUserToken(user,_config), user = userResponseResource });
+            return Ok(userResponseResource);
         }
     }
 }

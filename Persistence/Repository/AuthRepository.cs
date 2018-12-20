@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Code.Core.Interfaces;
 using Code.Core.Models;
@@ -28,6 +30,16 @@ namespace Code.Persistence.Repository
                 return user;
 
             return null;
+        }
+
+        public async Task<User> Register(User user, string password) {
+            var result = await _userManager.CreateAsync(user, password);
+
+            if(!result.Succeeded)
+                throw new Exception(String.Join("\n", result.Errors.Select(x=>x.Description)));
+
+            //Trigger event for email verification;
+            return  user;
         }
     }
 }
